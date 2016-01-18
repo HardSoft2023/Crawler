@@ -8,15 +8,15 @@ root = 'http://www.ygdy8.net'
 patternBig = '/templets/img/dot_hor.gif(.*?)</table>'
 pattern = '<a href="(.*?)" class="ulink".*?<td colspan="2" style="padding-left:3px">(.*?)</td>'
 patternDps = '◎(.*?)</p>'
-yiming = '◎译　　名 (?P<yiming>.*?)<br />'
-pianming = '◎片　　名(&nbsp;)?　(?P<pianming>.*?)<br />'
-niandai = '◎年　　代　(?P<niandai>.*?)<br />'
-guojia = '◎国　　家　(?P<guojia>.*?)<br />'
-leibie = '◎类　　别|型　(?P<leibie>.*?)<br />'
-yuyan = '◎语　　言　(?P<yuyan>.*?)<br />'
-zimu = '◎字　　幕　(?P<zimu>.*?)<br />'
-pingfen = '◎IMD[bB]评分(&nbsp;)? (?P<pingfen>.*?)/10'
-for pageNum in range(1, 3, 1):
+yiming = '译　　 ?名(&nbsp;)?(?P<yiming>.*?)<'
+pianming = '片　　 ?名(&nbsp;)?(?P<pianming>.*?)<'
+niandai = '◎年　　 ?代(&nbsp;)?(?P<niandai>.*?)<'
+guojia = '◎国　　 ?家(&nbsp;)?(?P<guojia>.*?)<'
+leibie = '◎类　　 ?别(&nbsp;)?(?P<leibie>.*?)<'
+yuyan = '◎语　　 ?言(&nbsp;)?(?P<yuyan>.*?)<'
+zimu = '◎字　　 ?幕(&nbsp;)?(?P<zimu>.*?)<'
+pingfen = '◎[iI]MD[bB]评分(&nbsp;)? (?P<pingfen>.*?)/10'
+for pageNum in range(1, 27, 1):
     newUrl = re.sub('list_7_\d', 'list_7_%d' % pageNum, url)
     print newUrl
     response = requests.get(newUrl)
@@ -34,20 +34,70 @@ for pageNum in range(1, 3, 1):
             dpscUtf8 = dpscde.encode('utf-8')
             bigDpsUtf8List = re.findall(patternDps, dpscUtf8, re.S)
             for bigDps in bigDpsUtf8List:
+                print bigDps
                 match = re.search(yiming, bigDps)
-                print match.group('yiming')
+                if match is not None:
+                    print match.group('yiming')
+                else:
+                    yiming1 = '中 文 名(&nbsp;)?(?P<yiming1>.*?)<'
+                    match = re.search(yiming1, bigDps)
+                    if match is not None:
+                        print match.group('yiming1')
+                    else:
+                        print '-1'
                 match = re.search(pianming, bigDps)
-                print match.group('pianming')
+                if match is not None:
+                    print match.group('pianming')
+                else:
+                    pianming1 = '英 文 名(&nbsp;)?(?P<pianming1>.*?)<'
+                    match = re.search(pianming1, bigDps)
+                    if match is not None:
+                        print match.group('pianming1')
+                    else:
+                        print '-1'
                 match = re.search(niandai, bigDps)
-                print match.group('niandai')
+                if match is not None:
+                    print match.group('niandai')
+                else:
+                    print '-1'
                 match = re.search(guojia, bigDps)
-                print match.group('guojia')
+                if match is not None:
+                    print match.group('guojia')
+                else:
+                    guojia1 = '◎地　　区(&nbsp;)?(?P<guojia1>.*?)<'
+                    match = re.search(guojia1, bigDps)
+                    if match is not None:
+                        print match.group('guojia1')
+                    else:
+                        print '-1'
                 match = re.search(leibie, bigDps)
-                print match.group('leibie')
+                if match is not None:
+                    print match.group('leibie')
+                else:
+                    leibie1 = '◎类　　型(&nbsp;)?(?P<leibie1>.*?)<'
+                    match = re.search(leibie1, bigDps)
+                    if match is not None:
+                        print match.group('leibie1')
+                    else:
+                        leibie2 = '◎电影类型(&nbsp;)?(?P<leibie2>.*?)<'
+                        match = re.search(leibie2, bigDps)
+                        if match is not None:
+                            print match.group('leibie2')
+                        else:
+                            print '-1'
                 match = re.search(yuyan, bigDps)
-                print match.group('yuyan')
+                if match is not None:
+                    print match.group('yuyan')
+                else:
+                    print '-1'
                 match = re.search(zimu, bigDps)
-                print match.group('zimu')
+                if match is not None:
+                    print match.group('zimu')
+                else:
+                    print '-1'
                 match = re.search(pingfen, bigDps)
-                print match.group('pingfen')
+                if match is not None:
+                    print match.group('pingfen')
+                else:
+                    print '-1'
                 print "==================================================================="
