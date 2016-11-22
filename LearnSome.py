@@ -8,7 +8,7 @@ def fetchMessageAll():
                                         use_unicode=True, port=5209, charset='utf8')
     messageExecutor = dbConenectMessage.cursor()
     # limit 10
-    messageExecutor.execute("""select record_time,uuid,content from honeycomb.sms_zthy_analysis limit 1""")
+    messageExecutor.execute("""select record_time,uuid,content from honeycomb.sms_zthy_analysis""")
     messageContent = messageExecutor.fetchall()
     return messageContent
 def fetchMessageByDay(day):
@@ -23,17 +23,18 @@ def fetchMessageByDay(day):
     return messageContent
 def getValidMessage(message):
     # 顺序不能变
-    finished = ('点播了', '已')
+    finished = ('点播了', '已', '感谢您使用')
     for i in finished:
         if i in message:
             return True
     return False
 def getStatus(message):
     baoyue=('订购', '定制', '订制', '办理')
-    dianbo='点播'
+    dianbo=('点播', '感谢您使用')
     cancel = ('取消', '退订')
-    if dianbo in message:
-        return 1
+    for i in dianbo:
+        if i in message:
+            return 1
     for i in baoyue:
         if (i in message) and (message.index(i) > message.index('已')):
             return 2
@@ -84,24 +85,29 @@ print str(charge_codes).decode(encoding='unicode_escape')
 messageContent = fetchMessageAll()
 # print str(messageContent).decode(encoding='unicode_escape')
 # print str(messageContent).encode(encoding='utf-8')
-# notfinished = open("/data/sdg/guoliufang/other_work_space/Eception.txt", mode='wa+')
-notfinished = open("/Users/LiuFangGuo/Downloads/Eception.txt", mode='wa+')
+notfinished = open("/data/sdg/guoliufang/other_work_space/Eception.txt", mode='wa+')
+# notfinished = open("/Users/LiuFangGuo/Downloads/Eception.txt", mode='wa+')
 for index in range(len(messageContent)):
-    # message = messageContent[index][2].encode(encoding='utf-8')
-    message = """尊敬的客户，您向我们反映的问题已处理完毕，现将201605的浙江新万蓝科技有限公司费用计13.00元、201605的北京中天华宇科技有限责任公司梦网费用计1.00元退至您的话费帐户，请注意查收，感谢您的支持! 更多自助便捷服务，请登录浙江移动手机营业
-厅 http://t.cn/R5umZFp 。 【业务告知】【优惠提醒】您可以参加加量不加价活动，月费不变，次月及次次月享受50元包1GB的飞享套餐。到期按照50元/月收取。登录手机营业厅办理 http://t.cn/RGdCekj (中国移动)(中国移动)"""
+    message = messageContent[index][2].encode(encoding='utf-8')
+    # message = """尊敬的神州行客户，除套餐内包含的业务外，您正在使用的包月业务有：中国移动业务：1、校讯通9元/月；2、和娱乐体验包0元/月；3、和俱乐部0元/月；由中国移动代收费的业务：4、涉税查询(中天华宇)3元/月；5、个税缴纳(中天华宇)5元/月；6、超级乐乐乐(心情互动)15元/月；7、手机支付(手机支付)0元/月；回复业务名称前的数字序号取消对应业务；如需取消多项业务，请回复各业务对应数字序号，中间用逗号分隔。2小时内回复有效，回复免费。以上所列业务资费均为标准资费，实际收费以账单费用为准，您享受的优惠包业务情况请咨询当地营业厅或10086客服热线。查询近五个月已出账账单，可发送“CXZD#年月（如201309）”到10086。中国移动"""
     isValid = getValidMessage(message)
     if not isValid:
-        print "-" * 20 + str(isValid) + "-" * 20
+        print "-" * 20 + "无效字符串" + "-" * 20
         print message
-        notfinished.write(message)
+        notfinished.write(message + "\n")
     else:
         status = getStatus(message)
         if status > -1:
-            print "-" * 20 + "有效字符串" + "-" * 20
-            print message
-            print str(status)
             sp_name = getSpName(message)
-            for i in sp_name:
-                print i[0]
-                print i[1]
+            if sp_name == -1:
+                print "-" * 20 + "无效字符串" + "-" * 20
+                print message
+                notfinished.write(message + "\n")
+                status = -1
+            else:
+                print "-" * 20 + "有效字符串" + "-" * 20
+                print message
+                print str(status)
+                for i in sp_name:
+                    print i[0]
+                    print i[1]
