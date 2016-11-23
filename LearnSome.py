@@ -8,7 +8,7 @@ def fetchMessageAll():
                                         use_unicode=True, port=5209, charset='utf8')
     messageExecutor = dbConenectMessage.cursor()
     # limit 10
-    messageExecutor.execute("""select record_time,uuid,content from honeycomb.sms_zthy_analysis""")
+    messageExecutor.execute("""select record_time,uuid,content from honeycomb.sms_zthy_analysis limit 3""")
     messageContent = messageExecutor.fetchall()
     return messageContent
 def fetchMessageByDay(day):
@@ -34,6 +34,8 @@ def getSubString(message):
     targetStr = message[start:start + leng]
     return targetStr
 
+
+
 def getStatus(message):
     baoyue=('订购', '定制', '订制', '办理')
     dianbo=('点播', '感谢您使用')
@@ -49,8 +51,8 @@ def getStatus(message):
         targetStr = getSubString(message)
         if i in targetStr:
             return 0
-    print "-" * 20 + "无效字符串" + "-" * 20
-    print message
+    # print "-" * 20 + "无效字符串" + "-" * 20
+    # print message
     return -1
 def getSpName(message):
     result_list=[]
@@ -87,37 +89,56 @@ executor.execute("""select id, name from sp_channels""")
 sp_channels = executor.fetchall()
 executor.execute("""select id,amount,name from charge_codes""")
 charge_codes = executor.fetchall()
-print str(sp_channels).decode(encoding='unicode_escape')
-print str(charge_codes).decode(encoding='unicode_escape')
+# print str(sp_channels).decode(encoding='unicode_escape')
+# print str(charge_codes).decode(encoding='unicode_escape')
 # 其实相当于一个二维数组了。
 # print charge_codes[1][2]
 # messageContent = fetchMessageByDay('2016-10-01')
 messageContent = fetchMessageAll()
 # print str(messageContent).decode(encoding='unicode_escape')
 # print str(messageContent).encode(encoding='utf-8')
-notfinished = open("/data/sdg/guoliufang/other_work_space/Eception.txt", mode='wa+')
+# notfinished = open("/data/sdg/guoliufang/other_work_space/Eception.txt", mode='wa+')
 # notfinished = open("/Users/LiuFangGuo/Downloads/Eception.txt", mode='wa+')
+csvlist=[]
 for index in range(len(messageContent)):
-    message = messageContent[index][2].encode(encoding='utf-8')
+    message = "'" + messageContent[index][2] +"'".encode(encoding='utf-8')
     # message = """订购提醒：您好！您已成功订购由北京中天华宇科技有限责任公司提供的税务杂志精编，10元/月（由中国移动代收费），72小时内退订免费。【发送6700至10086每月免费体验10GB咪咕视频定向流量，可以连续体验3个月！详情 http://url.cn/40C8anS 】"""
     isValid = getValidMessage(message)
     if not isValid:
-        print "-" * 20 + "无效字符串" + "-" * 20
-        print message
-        notfinished.write(message + "\n")
+        csvlist.append(("'" + str(messageContent[index][0]) + "'",str(messageContent[index][1]),"'" + messageContent[index][2] +"'",str(-1),"'" + str(-1)+ "'","'" + str(-1) + "'"))
+        continue
+        # print "-" * 20 + "无效字符串" + "-" * 20
+        # print message
+        # notfinished.write(message + "\n")
     else:
         status = getStatus(message)
         if status > -1:
             sp_name = getSpName(message)
             if sp_name == -1:
-                print "-" * 20 + "无效字符串" + "-" * 20
-                print message
-                notfinished.write(message + "\n")
-                status = -1
+                csvlist.append(("'" + str(messageContent[index][0]) + "'", str(messageContent[index][1]), "'" + messageContent[index][2] +"'", str(-1),"'" + str(-1) +"'","'" + str(-1) + "'"))
+                continue
+                # print "-" * 20 + "无效字符串" + "-" * 20
+                # print message
+                # notfinished.write(message + "\n")
+                # status = -1
             else:
-                print "-" * 20 + "有效字符串" + "-" * 20
-                print message
-                print str(status)
+                # print "-" * 20 + "有效字符串" + "-" * 20
+                # print message
+                # print str(status)
                 for i in sp_name:
-                    print i[0]
-                    print i[1]
+                    csvlist.append(("'" + str(messageContent[index][0]) + "'", str(messageContent[index][1]), "'" + messageContent[index][2] +"'", str(status), "'" + i[0] + "'","'" + i[1] + "'"))
+                    # continue
+                    # print i[0]
+                    # print i[1]
+        else:
+            csvlist.append(("'" + str(messageContent[index][0]) + "'", str(messageContent[index][1]), "'" + messageContent[index][2] +"'", str(-1),"'" + str(-1) +"'","'" + str(-1) + "'"))
+            continue
+# write list
+dbWriteResult = MySQLdb.connect(host='192.168.12.155', user='guoliufang', passwd='tiger2108', db='honeycomb',
+                                use_unicode=True, port=5209, charset='utf8')
+resultExecutor = dbWriteResult.cursor()
+for record in csvlist:
+    var_string =','.join(record)
+    sql = 'INSERT INTO honeycomb.sms_zthy_analysis_clearing VALUES (%s)' %var_string
+    print sql
+    resultExecutor.execute(sql)
