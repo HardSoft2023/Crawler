@@ -28,6 +28,12 @@ def getValidMessage(message):
         if i in message:
             return True
     return False
+def getSubString(message):
+    start = message.index('已')
+    leng = 28
+    targetStr = message[start:start + leng]
+    return targetStr
+
 def getStatus(message):
     baoyue=('订购', '定制', '订制', '办理')
     dianbo=('点播', '感谢您使用')
@@ -36,10 +42,12 @@ def getStatus(message):
         if i in message:
             return 1
     for i in baoyue:
-        if (i in message) and (message.index(i) > message.index('已')):
+        targetStr=getSubString(message)
+        if i in targetStr:
             return 2
     for i in cancel:
-        if (i in message) and (message.index(i) > message.index('已')):
+        targetStr = getSubString(message)
+        if i in targetStr:
             return 0
     print "-" * 20 + "无效字符串" + "-" * 20
     print message
@@ -49,7 +57,7 @@ def getSpName(message):
     for sp_tuple in sp_channels:
         sp_name = sp_tuple[1].encode(encoding='utf-8')
         if sp_name in message:
-            ch_code=getChargeConde(sp_name,message)
+            ch_code=getChargeConde('-'+sp_name+'-',message)
             if ch_code == -1:
                 continue
             else:
@@ -62,11 +70,13 @@ def getChargeConde(sp_name,message):
         sp_charge_str = charge_tuple[2].encode(encoding='utf-8')
         if sp_name in sp_charge_str:
             start = sp_charge_str.index(sp_name)
-            targetStr = sp_charge_str[start+len(sp_name)+1:]
+            targetStr = sp_charge_str[start+len(sp_name):]
             code_list =targetStr.split('-')
-            for code in code_list :
-                if code in message:
-                    return code
+            if len(code_list) > 1:
+                for code in code_list:
+                    if code in message:
+                        return code
+
     return -1
 # ---从这里开始是 main 函数入口
 dbConenectReference = MySQLdb.connect(host='192.168.12.66', user='tigerreport', passwd='titmds4sp',
@@ -89,7 +99,7 @@ notfinished = open("/data/sdg/guoliufang/other_work_space/Eception.txt", mode='w
 # notfinished = open("/Users/LiuFangGuo/Downloads/Eception.txt", mode='wa+')
 for index in range(len(messageContent)):
     message = messageContent[index][2].encode(encoding='utf-8')
-    # message = """尊敬的神州行客户，除套餐内包含的业务外，您正在使用的包月业务有：中国移动业务：1、校讯通9元/月；2、和娱乐体验包0元/月；3、和俱乐部0元/月；由中国移动代收费的业务：4、涉税查询(中天华宇)3元/月；5、个税缴纳(中天华宇)5元/月；6、超级乐乐乐(心情互动)15元/月；7、手机支付(手机支付)0元/月；回复业务名称前的数字序号取消对应业务；如需取消多项业务，请回复各业务对应数字序号，中间用逗号分隔。2小时内回复有效，回复免费。以上所列业务资费均为标准资费，实际收费以账单费用为准，您享受的优惠包业务情况请咨询当地营业厅或10086客服热线。查询近五个月已出账账单，可发送“CXZD#年月（如201309）”到10086。中国移动"""
+    # message = """订购提醒：您好！您已成功订购由北京中天华宇科技有限责任公司提供的税务杂志精编，10元/月（由中国移动代收费），72小时内退订免费。【发送6700至10086每月免费体验10GB咪咕视频定向流量，可以连续体验3个月！详情 http://url.cn/40C8anS 】"""
     isValid = getValidMessage(message)
     if not isValid:
         print "-" * 20 + "无效字符串" + "-" * 20
