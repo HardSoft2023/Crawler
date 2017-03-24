@@ -5,6 +5,15 @@ print "草拟吗"
 import requests
 import smtplib
 
+
+def alterMailException():
+    smsurl = "http://106.veesing.com/webservice/sms.php?method=Submit"
+    smspara = {"account": "cf_wxhdcs456", "password": "wxhdcs@123", "mobile": "15801076287",
+               "content": "尊敬的任亚轩先生/女士，恭喜您成功预约点餐失败邮箱出问题了，活动时间：2017！"}
+    smsrespone = requests.post(smsurl, smspara)
+    print smsrespone.content
+
+
 url = "http://182.92.171.178:8080/food_post.php"
 para = {"name": "郭流芳 陈曦 于志远 黄生波 龙潇", "phone": "123456", "message": ""}
 response = requests.get(url, params=para)
@@ -36,3 +45,4 @@ try:
     smtObj.sendmail(from_addr=mail_senter, to_addrs=tolist, msg=message.as_string())
 except:
     print "屌丝邮箱验证除了问题"
+    alterMailException()
