@@ -44,11 +44,11 @@
       <file leaf-file-name="email_update_sms_bridge_business.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/email_update_sms_bridge_business.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="90" lean-forward="false" selection-start-line="20" selection-start-column="90" selection-end-line="20" selection-end-column="90" />
+            <state relative-caret-position="548">
+              <caret line="63" column="18" lean-forward="false" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
               <folding>
-                <marker date="1493886430000" expanded="true" signature="1116:1230" ph="select * fro... charge_codes" />
-                <marker date="1493886430000" expanded="true" signature="2281:2313" ph="select max(i... charge_codes" />
+                <marker date="1493891851000" expanded="true" signature="1116:1230" ph="select * fro... charge_codes" />
+                <marker date="1493891851000" expanded="true" signature="2281:2313" ph="select max(i... charge_codes" />
               </folding>
             </state>
           </provider>
@@ -57,7 +57,7 @@
       <file leaf-file-name="__builtin__.pyi" pinned="false" current-in-tab="false">
         <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2/__builtin__.pyi">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
+            <state relative-caret-position="11295">
               <caret line="761" column="22" lean-forward="false" selection-start-line="761" selection-start-column="22" selection-end-line="761" selection-end-column="22" />
               <folding />
             </state>
@@ -96,7 +96,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="126" />
-    <option name="y" value="146" />
+    <option name="y" value="49" />
     <option name="width" value="1635" />
     <option name="height" value="951" />
   </component>
@@ -487,7 +487,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="126" y="146" width="1635" height="951" extended-state="0" />
+    <frame x="126" y="49" width="1635" height="951" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13455658" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -501,7 +501,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3284553" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39909297" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -867,7 +867,7 @@
     </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2/__builtin__.pyi">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
+        <state relative-caret-position="11295">
           <caret line="761" column="22" lean-forward="false" selection-start-line="761" selection-start-column="22" selection-end-line="761" selection-end-column="22" />
           <folding />
         </state>
@@ -875,11 +875,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/email_update_sms_bridge_business.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="90" lean-forward="false" selection-start-line="20" selection-start-column="90" selection-end-line="20" selection-end-column="90" />
+        <state relative-caret-position="548">
+          <caret line="63" column="18" lean-forward="false" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
           <folding>
-            <marker date="1493886430000" expanded="true" signature="1116:1230" ph="select * fro... charge_codes" />
-            <marker date="1493886430000" expanded="true" signature="2281:2313" ph="select max(i... charge_codes" />
+            <marker date="1493891851000" expanded="true" signature="1116:1230" ph="select * fro... charge_codes" />
+            <marker date="1493891851000" expanded="true" signature="2281:2313" ph="select max(i... charge_codes" />
           </folding>
         </state>
       </provider>

@@ -61,7 +61,7 @@ def getEmailContent():
     update_max_id = tiger_report_production_cursor.fetchone()
     # print 如果最大id发生了更新，则进行更新。。
     new_id = update_max_id[0]
-    if new_id > MAX_ID:
+    if int(new_id) > int(MAX_ID):
         with open(max_id_file, mode='w') as f:
             f.write(str(new_id))
     else:
