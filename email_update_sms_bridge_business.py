@@ -39,7 +39,7 @@ def getEmailContent():
     MAX_ID = getMaxId(max_id_file)
     update_sql = "select * from charge_codes where (is_monthly_code=1 or interval_seconds >=2592000) and business_coding=1 and id > " + MAX_ID
     tiger_report_production_connection = MySQLdb.connect(host='192.168.12.67', user='guoliufang', passwd='d9C83^16Ys',
-                                                         db='TigerReport_production', use_unicode=True)
+                                                         db='TigerReport_production', charset='utf8')
     tiger_report_production_cursor = tiger_report_production_connection.cursor()
     tiger_report_production_cursor.execute(update_sql)
     update_content_list = tiger_report_production_cursor.fetchall()
