@@ -10,9 +10,9 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 import requests
 
-max_id_file = "/Users/LiuFangGuo/Downloads/max_id_file"
+# max_id_file = "/Users/LiuFangGuo/Downloads/max_id_file"
 # 生产环境要用这个
-# max_id_file = ""
+max_id_file = "/home/guoliufang/max_id_file"
 mail_host = "email.tigerjoys.com"
 mail_port = 587
 login_user = "guoliufang@corp.tigerjoys.com"
@@ -38,7 +38,6 @@ def alterMailException():
 def getEmailContent():
     MAX_ID = getMaxId(max_id_file)
     update_sql = "select * from charge_codes where (is_monthly_code=1 or interval_seconds >=2592000) and business_coding=1 and id > " + MAX_ID
-    print update_sql
     tiger_report_production_connection = MySQLdb.connect(host='192.168.12.67', user='guoliufang', passwd='d9C83^16Ys',
                                                          db='TigerReport_production', use_unicode=True)
     tiger_report_production_cursor = tiger_report_production_connection.cursor()
@@ -56,6 +55,17 @@ def getEmailContent():
             html_table_content += """<td nowrap="nowrap">""" + str(e) + "</td>"
         header_html += "<tr>" + html_table_content + "</tr>"
     header_html += """</tbody>"""
+    # 这里加一个更新最大id的程序。。
+    update_max_id_sql = "select max(id) from charge_codes"
+    tiger_report_production_cursor.execute(update_max_id_sql)
+    update_max_id = tiger_report_production_cursor.fetchone()
+    # print 如果最大id发生了更新，则进行更新。。
+    new_id = update_max_id[0]
+    if new_id > MAX_ID:
+        with open(max_id_file, mode='w') as f:
+            f.write(str(new_id))
+    else:
+        print "最大id没有更新"
     return header_html
 
 
@@ -71,14 +81,11 @@ xxhtml = """
 <p>LiuFangGuo</p>
 </body></html>
 """
-# message = MIMEText(_text=xxhtml, _charset="utf-8")
-# message = MIMEText(_text=email_content, _charset="utf-8")
 message = MIMEMultipart("alternative", None, [MIMEText(xxhtml, 'html')])
 message['Subject'] = "包月码更新了"
 message['To'] = ','.join(tolist)
 message['From'] = mail_senter
 try:
-    # smtObj = smtplib.SMTP_SSL(host=mail_host, port=mail_port)
     smtObj = smtplib.SMTP(host=mail_host, port=mail_port)
     smtObj.starttls()
     smtObj.login(user=login_user, password=login_password)
