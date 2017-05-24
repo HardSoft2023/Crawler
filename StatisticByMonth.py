@@ -101,7 +101,7 @@ csvlist = []
 # getStastic('201702')
 # getStastic('2017-02')
 getStastic(sys.argv[1])
-csvfile = open("/data/sdg/guoliufang/mysqloutfile/greeplumResult.txt", mode='wa+')
+csvfile = open("/data/sdg/guoliufang/mysqloutfile/greeplumResult.txt" + sys.argv[1], mode='wa+')
 # csvfile = open("/Users/LiuFangGuo/Downloads/greeplumResult.txt", mode='wa+')
 for record in csvlist:
     csvfile.write('|'.join(str(e) for e in record) + "\n")
