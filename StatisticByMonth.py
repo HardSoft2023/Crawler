@@ -31,7 +31,7 @@ def getRefMap():
             newList = []
             newList.append(rest)
             ref_dict[key] = newList
-    print(ref_dict)
+    # print(ref_dict)
     return ref_dict
 
 
@@ -46,15 +46,15 @@ def getXiaFa(listTuple, start_end_tp):
         tmp = "'" + str(tp[4])[3:] + "_" + tp[3] + "'"
         tmpList.append(tmp)
     tmpMid = ','.join(tmpList)
-    print(tmpMid)
+    # print(tmpMid)
     sql_xifa = """select code_event, count(distinct uuid) from bdl.crab_code_histories where code_union_name in (""" + tmpMid + """) and record_time between """ + \
                start_end_tp[0] + """ and """ + start_end_tp[1] + """ group by code_event order by code_event"""
-    print(sql_xifa)
+    # print(sql_xifa)
     gpExecutor.execute(sql_xifa)
     xiafa_tuple_List = gpExecutor.fetchall()
-    a10 = 0
-    a20 = 0
-    a30 = 0
+    a10 = 1
+    a20 = 1
+    a30 = 1
     for rTuple in xiafa_tuple_List:
         if rTuple[0] == 10:
             a10 = rTuple[1]
@@ -83,7 +83,7 @@ def getStastic(dayStr):
     for result_tuple in result_records_list:
         # print(result_tuple)
         listTuple = refMap[result_tuple[0]]
-        print(listTuple)
+        # print(listTuple)
         xiafa_result_tuple = getXiaFa(listTuple, start_end_tp)
         weight = getWeight(xiafa_result_tuple, result_tuple[1])
         # recortime,yewuma,xiafa,lilun,sms,shiji,外表连接符，随便其中一个渠道的信息。
