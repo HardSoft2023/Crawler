@@ -3,6 +3,7 @@
 from calendar import monthrange
 import psycopg2
 import sys
+import math
 
 
 def getFormatStartEnd(yuefen):
@@ -37,11 +38,11 @@ def getRefMap():
 def getXiaFa(listTuple, start_end_tp):
     tmpList = []
     restTp = listTuple[0]
-    print("-------------------某一个完整的渠道码" + str(restTp))
+    # print("-------------------某一个完整的渠道码" + str(restTp))
     for tp in listTuple:
-        print("这是destnum" + tp[3])
-        print("这是dest_num_code" + tp[4])
-        print("不带*#T的" + str(tp[4])[3:])
+        # print("这是destnum" + tp[3])
+        # print("这是dest_num_code" + tp[4])
+        # print("不带*#T的" + str(tp[4])[3:])
         tmp = "'" + str(tp[4])[3:] + "_" + tp[3] + "'"
         tmpList.append(tmp)
     tmpMid = ','.join(tmpList)
@@ -64,6 +65,15 @@ def getXiaFa(listTuple, start_end_tp):
     return (tmpMid, a10, a20, a30, restTp[0], restTp[1], restTp[2], restTp[3], restTp[4], restTp[5], restTp[6])
 
 
+def getWeight(xiafa_result_tuple, sms_count):
+    lilun = xiafa_result_tuple[2]
+    jiage = xiafa_result_tuple[9]
+    z = (jiage - 3.0) / (15.0 - 3.0)
+    y = math.log10(lilun)
+    w = (sms_count + 0.0) / (xiafa_result_tuple[3] + 0.0)
+    return z * y * w
+
+
 def getStastic(dayStr):
     start_end_tp = getFormatStartEnd(dayStr)
     sql_sms = """select sms_business_text, count(distinct uuid) from bdl.honeycomb_sms_histories_appendix where sms_business_text is not null and status = 'ok' and record_time between """ + \
@@ -75,8 +85,9 @@ def getStastic(dayStr):
         listTuple = refMap[result_tuple[0]]
         print(listTuple)
         xiafa_result_tuple = getXiaFa(listTuple, start_end_tp)
+        weight = getWeight(xiafa_result_tuple, result_tuple[1])
         # recortime,yewuma,xiafa,lilun,sms,shiji,外表连接符，随便其中一个渠道的信息。
-        csvlist.append((dayStr, result_tuple[0], result_tuple[1], xiafa_result_tuple[0], xiafa_result_tuple[1],
+        csvlist.append((dayStr, result_tuple[0], result_tuple[1], weight, xiafa_result_tuple[0], xiafa_result_tuple[1],
                         xiafa_result_tuple[2], xiafa_result_tuple[3], xiafa_result_tuple[4], xiafa_result_tuple[5],
                         xiafa_result_tuple[6], xiafa_result_tuple[7], xiafa_result_tuple[8], xiafa_result_tuple[9],
                         xiafa_result_tuple[10]))
@@ -87,11 +98,11 @@ dbGpsqlConn = psycopg2.connect(database='tjdw', user='tj_root', password='77pbV1
 gpExecutor = dbGpsqlConn.cursor()
 refMap = getRefMap()
 csvlist = []
-getStastic('201702')
+# getStastic('201702')
 # getStastic('2017-02')
-# getStastic(sys.argv[1])
+getStastic(sys.argv[1])
 csvfile = open("/data/sdg/guoliufang/mysqloutfile/greeplumResult.txt", mode='wa+')
-csvfile = open("/Users/LiuFangGuo/Downloads/greeplumResult.txt", mode='wa+')
+# csvfile = open("/Users/LiuFangGuo/Downloads/greeplumResult.txt", mode='wa+')
 for record in csvlist:
     csvfile.write('|'.join(str(e) for e in record) + "\n")
 csvfile.close()
