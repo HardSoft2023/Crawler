@@ -16,7 +16,7 @@ def getFormatStartEnd(yuefen):
 
 
 def getRefMap():
-    sql_ref = """select * from bdl.honeycomb_sms_bridge_business"""
+    sql_ref = """select * from bdl.honeycomb_sms_bridge_business_temp"""
     gpExecutor.execute(sql_ref)
     ref_tuple_list = gpExecutor.fetchall()
     ref_dict = dict()
@@ -76,7 +76,7 @@ def getWeight(xiafa_result_tuple, sms_count):
 
 def getStastic(dayStr):
     start_end_tp = getFormatStartEnd(dayStr)
-    sql_sms = """select sms_business_text, count(distinct uuid) from bdl.honeycomb_sms_histories_appendix where sms_business_text is not null and status = 'ok' and record_time between """ + \
+    sql_sms = """select sms_business_text, count(distinct uuid) from bdl.honeycomb_sms_histories_appendix_temp where sms_business_text is not null and status = 'ok' and record_time between """ + \
               start_end_tp[0] + """ and """ + start_end_tp[1] + """ group by sms_business_text"""
     gpExecutor.execute(sql_sms)
     result_records_list = gpExecutor.fetchall()
@@ -101,7 +101,7 @@ csvlist = []
 # getStastic('201702')
 # getStastic('2017-02')
 getStastic(sys.argv[1])
-csvfile = open("/data/sdg/guoliufang/mysqloutfile/greeplumResult.txt" + sys.argv[1], mode='w+')
+csvfile = open("/data/sdg/guoliufang/mysqloutfile/greeplumResultTemp.txt" + sys.argv[1], mode='w+')
 # csvfile = open("/Users/LiuFangGuo/Downloads/greeplumResult.txt", mode='wa+')
 for record in csvlist:
     csvfile.write('|'.join(str(e) for e in record) + "\n")
