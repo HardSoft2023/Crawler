@@ -10,7 +10,7 @@ mail_host = "mail.glodon.com"
 mail_port = 587
 login_user = "guolf@glodon.com"
 mail_senter = "guolf@glodon.com"
-login_password = "goaway@0323CAONIMA"
+login_password = ""
 email_content = argv[3]
 message = MIMEText(_text=email_content, _charset="utf-8")
 message['Subject'] = argv[2]
